@@ -2,10 +2,6 @@ var express = require('express');
 var router = express.Router();
 const User = require('../models/user');
 
-let users = [
-  { id: 1, name: 'test', email: 'test@gmail.com' },
-  { id: 2, name: 'test two', email: 'test.two@gmail.com' }
-]
 /* GET users listing. */
 router.get('/', async (req, res, next) => {
   // res.json(users)
@@ -13,7 +9,7 @@ router.get('/', async (req, res, next) => {
   res.json(users)
 });
 
-router.get('/:id', async (req, res, next)=> {
+router.get('/:id', async (req, res, next) => {
   console.log(req.params.id)
   const userId = req.params.id
   const user = await User.findById(userId)
@@ -31,21 +27,34 @@ router.post('/', async (req, res, next) => {
   res.status(201).json(newUser)
 })
 
-router.put('/:id', function (req, res, next) {
-  const userId = parseInt(req.params.id)
-  const { name, email } = req.body;
-  const user = users.find(u => u.id === userId)
-  if (!user)
-    return res.status(404).json({ message: 'User not found' })
-  if (name) user.name = name;
-  if (email) user.email = email
-  res.json(user)
+router.put('/:id', async (req, res, next) => {
+  try {
+    const userId = req.params.id
+    const updates = req.body
+    const updatedUser = await User.findByIdAndUpdate(userId, updates, {
+      new: true
+    })
+    if (!updatedUser) {
+      return res.status(404).send({ message: 'User not found' })
+    }
+    res.send(updatedUser)
+  } catch (err) {
+    console.error(err)
+    res.status(400).send({ message: 'Error updating this user' })
+  }
+
 })
 
-router.delete('/:id', function (req, res, next) {
-  const userId = parseInt(req.params.id);
-  users = users.filter(u => u.id !== userId);
-  res.status(204).send()
+router.delete('/:id', async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+    await User.findByIdAndDelete(userId)
+    res.status(204).send()
+  }
+  catch (err) {
+    console.error(err)
+    res.status(500).send({ message: 'Error while deleting the user' })
+  }
 })
 
 module.exports = router;
