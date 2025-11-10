@@ -4,7 +4,7 @@ const User = require('../models/user');
 const userController = require('../controllers/user.controller')
 
 router.get('/', userController.getAllUsers)
-
+router.post('/', userController.createUser)
 
 /* GET users listing. */
 // router.get('/', async (req, res, next) => {
@@ -13,14 +13,14 @@ router.get('/', userController.getAllUsers)
 //   res.json(users)
 // });
 
-
-router.get('/:id', async (req, res, next) => {
-  console.log(req.params.id)
-  const userId = req.params.id
-  const user = await User.findById(userId)
-  if (!user) return res.status(404).json({ message: 'User not found' })
-  res.json(user)
-});
+// aAuthentication -> accessgenerated-> jwtmiddleware -> headup its valid to go forwards => jwt middleware next
+// router.get('/:id', async (req, res, next) => {
+//   console.log(req.params.id)
+//   const userId = req.params.id
+//   const user = await User.findById(userId)
+//   if (!user) return res.status(404).json({ message: 'User not found' })
+//   res.json(user)
+// });
 
 router.post('/', async (req, res, next) => {
   const { name, email } = req.body;
