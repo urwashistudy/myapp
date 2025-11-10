@@ -10,10 +10,11 @@ var ordersRouter = require('./routes/order');
 var productRouter = require('./routes/product')
 var app = express();
 const mongoose = require('mongoose')
+require('dotenv').config()
 
 const mongoDBURL = `mongodb+srv://myapp_db_user:LpqkzPrnk68pK3gZ@cluster0.yhkl4dm.mongodb.net/?appName=Cluster0`;
 
-mongoose.connect(mongoDBURL)
+mongoose.connect(process.env.MONGO_URL || mongoDBURL)
   .then(() => console.log(`MongoDB Connected Successfully`))
   .catch(err => console.log(`Failed to connect to MongoDB:`, err))
 

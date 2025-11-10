@@ -1,13 +1,18 @@
 var express = require('express');
 var router = express.Router();
 const User = require('../models/user');
+const userController = require('../controllers/user.controller')
+
+router.get('/', userController.getAllUsers)
+
 
 /* GET users listing. */
-router.get('/', async (req, res, next) => {
-  // res.json(users)
-  const users = await User.find();
-  res.json(users)
-});
+// router.get('/', async (req, res, next) => {
+//   // res.json(users)
+//   const users = await User.find();
+//   res.json(users)
+// });
+
 
 router.get('/:id', async (req, res, next) => {
   console.log(req.params.id)

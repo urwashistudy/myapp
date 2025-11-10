@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+//bcryptjs jsonwebtoken validator
 
 const userSchema = new mongoose.Schema({
     name: String,

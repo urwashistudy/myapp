@@ -54,23 +54,24 @@ router.post('/', async (req, res) => {
     }
 })
 
-// router.put('/:id', async (req, res, next) => {
-//     try {
-//         const userId = req.params.id
-//         const updates = req.body
-//         const updatedUser = await User.findByIdAndUpdate(userId, updates, {
-//             new: true
-//         })
-//         if (!updatedUser) {
-//             return res.status(404).send({ message: 'User not found' })
-//         }
-//         res.send(updatedUser)
-//     } catch (err) {
-//         console.error(err)
-//         res.status(400).send({ message: 'Error updating this user' })
-//     }
+router.put('/:orderId', async (req, res) => {
+    try {
+        const orderId = req.params.orderId
+        console.log(orderId, req.body)
+        const { status } = req.body
+        const updatedOrder = await Order.findByIdAndUpdate(orderId, { status }, {
+            new: true
+        })
+        if (!updatedOrder) {
+            return res.status(404).send({ message: 'Order not found' })
+        }
+        res.send(updatedOrder)
+    } catch (err) {
+        console.error(err)
+        res.status(400).send({ message: 'Error updating this order' })
+    }
 
-// })
+})
 
 // router.delete('/:id', async (req, res, next) => {
 //     try {
