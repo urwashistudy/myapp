@@ -28,3 +28,21 @@ exports.getAllUsers = async (req, res) => {
         res.status(500).json({ error: err.message })
     }
 }
+
+exports.login = async (req, res) => {
+    console.log(`Inside login controller`)
+    try {
+        const { email, password } = req.body;
+        console.log(email, password)
+        const { token, user } = await userService.login(email, password);
+        res.json({ token, user })
+    }
+    catch (err) {
+        if (err.message === 'Invalid Credentials') {
+            res.status(401).json({ message: 'Invalid Credentials' })
+        } else {
+            console.error(err)
+            res.status(500).json({ message: 'Error logging in.' })
+        }
+    }
+}

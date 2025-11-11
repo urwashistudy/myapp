@@ -52,6 +52,7 @@ exports.getUserById = async (userId) => {
 }
 
 exports.getUserByEmail = async (email) => {
+    console.log(`Inside getUserByEmail`)
     try {
         const user = await User.findOne({ email });
         if (!user) {
