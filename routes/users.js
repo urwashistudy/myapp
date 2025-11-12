@@ -6,7 +6,8 @@ const authMiddleware = require('../middleware/authMiddleware')
 
 router.get('/', authMiddleware, userController.getAllUsers)
 router.post('/', userController.createUser)
-router.post('/login', userController.login)
+router.post('/login', userController.login);
+router.put('/:userId', userController.updateUser)
 /* GET users listing. */
 // router.get('/', async (req, res, next) => {
 //   // res.json(users)
@@ -23,33 +24,33 @@ router.get('/:id', async (req, res, next) => {
   res.json(user)
 });
 
-router.post('/', async (req, res, next) => {
-  const { name, email } = req.body;
-  if (!name || !email) {
-    return res.status(400).json({ message: 'Name and email are required' })
-  }
-  const newUser = new User(req.body)
-  await newUser.save()
-  res.status(201).json(newUser)
-})
+// router.post('/', async (req, res, next) => {
+//   const { name, email } = req.body;
+//   if (!name || !email) {
+//     return res.status(400).json({ message: 'Name and email are required' })
+//   }
+//   const newUser = new User(req.body)
+//   await newUser.save()
+//   res.status(201).json(newUser)
+// })
 
-router.put('/:id', async (req, res, next) => {
-  try {
-    const userId = req.params.id
-    const updates = req.body
-    const updatedUser = await User.findByIdAndUpdate(userId, updates, {
-      new: true
-    })
-    if (!updatedUser) {
-      return res.status(404).send({ message: 'User not found' })
-    }
-    res.send(updatedUser)
-  } catch (err) {
-    console.error(err)
-    res.status(400).send({ message: 'Error updating this user' })
-  }
+// router.put('/:id', async (req, res, next) => {
+//   try {
+//     const userId = req.params.id
+//     const updates = req.body
+//     const updatedUser = await User.findByIdAndUpdate(userId, updates, {
+//       new: true
+//     })
+//     if (!updatedUser) {
+//       return res.status(404).send({ message: 'User not found' })
+//     }
+//     res.send(updatedUser)
+//   } catch (err) {
+//     console.error(err)
+//     res.status(400).send({ message: 'Error updating this user' })
+//   }
 
-})
+// })
 
 router.delete('/:id', async (req, res, next) => {
   try {

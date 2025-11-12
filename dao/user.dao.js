@@ -29,11 +29,35 @@ exports.updateUser = async (userId, userData) => {
     }
 }
 
-exports.getAllUsers = async () => {
+exports.getAllUsers = async (skip, limit, search) => {
     try {
+        const query = {}
         console.log(`Inside getAllUsers dao`)
-        const users = await User.find();
+        if (search) {
+            query.$or = [
+                { name: { $regex: search } },
+                { email: { $regex: search } }
+            ]
+        }
+        const project = 'email'
+        const users = await User.find(query).select(project).skip(skip).limit(limit).exec();
         return users
+    } catch (err) {
+        throw err
+    }
+}
+
+exports.getCount = async (search) => {
+    try {
+        const query = {};
+        if (search) {
+            query.$or = [
+                { name: { $regex: search } },
+                { email: { $regex: search } }
+            ]
+        }
+        const count = await User.countDocuments(query)
+        return count
     } catch (err) {
         throw err
     }
@@ -54,7 +78,9 @@ exports.getUserById = async (userId) => {
 exports.getUserByEmail = async (email) => {
     console.log(`Inside getUserByEmail`)
     try {
+        console.log(email)
         const user = await User.findOne({ email });
+        console.log(user)
         if (!user) {
             throw new Error('User not found')
         }
